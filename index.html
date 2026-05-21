@@ -118,6 +118,11 @@
             text-align: center;
         }
         
+        .newsletter-embed {
+            max-width: 420px;
+            margin: 40px auto 0;
+        }
+        
         .newsletter-form {
             max-width: 400px;
             margin: 40px auto 0;
@@ -254,10 +259,9 @@
             <h2 class="section-title">Receive the signal</h2>
             <p class="manifesto-intro">One dispatch per week. Pure signal, zero noise.</p>
             
-            <form class="newsletter-form" action="#" method="POST">
-                <input type="email" class="newsletter-input" placeholder="Enter your email" required>
-                <button type="submit" class="cta-button">Subscribe</button>
-            </form>
+            <div class="newsletter-embed">
+                <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="6a932790-a767-47d7-a25b-6df96c021df7"></script>
+            </div>
         </div>
     </section>
     
