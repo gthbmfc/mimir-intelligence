@@ -3,14 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIMIR Intelligence</title>
+    <title>MIMIR Intelligence — AI Engineering Field Guide</title>
+    <meta name="description" content="A field guide to AI engineering: agent architecture, memory, and the failure modes nobody warns you about until production.">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background-color: #0a0a0f;
             color: #e0e0e0;
@@ -19,169 +15,148 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        
-        h1, h2, h3, .section-title, .tagline {
+        h1, h2, h3, .section-title, .hero-sub {
             font-family: Georgia, serif;
             color: #c8a96e;
             font-weight: normal;
             letter-spacing: 0.5px;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 80px 0; min-height: 100vh; display: flex; align-items: center; }
+        a { color: #c8a96e; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Nav */
+        .nav-bar {
+            background: #0a0a0f;
+            border-bottom: 1px solid #1a1a2e;
+            padding: 14px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        
-        section {
-            padding: 80px 0;
-            min-height: 100vh;
+        .nav-inner {
             display: flex;
+            justify-content: space-between;
             align-items: center;
         }
-        
-        .hero {
-            text-align: center;
-            padding: 60px 20px;
+        .nav-logo {
+            font-family: Georgia, serif;
+            color: #c8a96e;
+            font-size: 1.15rem;
+            letter-spacing: 4px;
         }
-        
-        .logo {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 30px;
-        }
-        
-        .tagline {
-            font-size: 1.8rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-        
-        .cta-button {
+        .nav-right { display: flex; align-items: center; gap: 24px; }
+        .nav-right a { font-size: 0.88rem; opacity: 0.7; transition: opacity 0.2s; }
+        .nav-right a:hover { opacity: 1; text-decoration: none; }
+        .nav-cta {
             background: transparent;
             border: 1px solid #c8a96e;
             color: #c8a96e;
-            padding: 12px 30px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
+            padding: 7px 18px;
+            font-size: 0.88rem;
+            opacity: 1 !important;
+            transition: all 0.25s;
         }
-        
-        .cta-button:hover {
+        .nav-cta:hover { background: #c8a96e; color: #0a0a0f; }
+
+        /* Hero */
+        .hero { text-align: center; padding: 40px 20px; }
+        .logo {
+            width: 180px; height: 180px;
+            margin: 0 auto 28px;
+        }
+        .hero h1 {
+            font-size: 2.4rem;
+            line-height: 1.3;
+            max-width: 800px;
+            margin: 0 auto 18px;
+        }
+        .hero-sub {
+            font-size: 1.05rem;
+            opacity: 0.75;
+            max-width: 620px;
+            margin: 0 auto 36px;
+            font-family: system-ui;
+            color: #c0c0c0;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary, .btn-secondary {
+            padding: 12px 30px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
             background: #c8a96e;
             color: #0a0a0f;
+            border: 1px solid #c8a96e;
         }
-        
-        .manifesto {
-            text-align: center;
+        .btn-primary:hover { background: transparent; color: #c8a96e; text-decoration: none; }
+        .btn-secondary {
+            background: transparent;
+            color: #c8a96e;
+            border: 1px solid #c8a96e;
         }
-        
-        .manifesto-intro {
-            max-width: 600px;
-            margin: 0 auto 60px;
-            font-size: 1.1rem;
-            opacity: 0.8;
-        }
-        
-        .pillars {
+        .btn-secondary:hover { background: #c8a96e; color: #0a0a0f; text-decoration: none; }
+
+        /* Covers */
+        .covers-section { text-align: center; }
+        .covers-section h2 { font-size: 1.6rem; margin-bottom: 50px; }
+        .covers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
         }
-        
-        .pillar-card {
+        .cover-card {
             border: 1px solid #1a1a2e;
             padding: 30px;
             background: #0d0d1a;
+            text-align: left;
             transition: transform 0.3s ease;
         }
-        
-        .pillar-card:hover {
-            transform: translateY(-5px);
-            border-color: #c8a96e;
-        }
-        
-        .pillar-title {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-        }
-        
-        .pillar-desc {
-            opacity: 0.7;
-            line-height: 1.5;
-        }
-        
-        .newsletter {
-            text-align: center;
-        }
-        
-        .newsletter-embed {
-            max-width: 420px;
-            margin: 40px auto 0;
-        }
-        
-        .newsletter-form {
-            max-width: 400px;
-            margin: 40px auto 0;
-        }
-        
-        .newsletter-input {
-            width: 100%;
-            padding: 12px;
-            background: transparent;
-            border: 1px solid #c8a96e;
-            color: #e0e0e0;
-            font-family: system-ui;
-            margin-bottom: 12px;
-        }
-        
-        .newsletter-input:focus {
-            outline: none;
-            border-color: #c8a96e;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 40px 0;
-        }
-        
-        .footer-link {
-            color: #c8a96e;
-            text-decoration: none;
-            opacity: 0.7;
-        }
-        
+        .cover-card:hover { transform: translateY(-5px); border-color: #c8a96e; }
+        .cover-card h3 { font-size: 1.2rem; margin-bottom: 14px; }
+        .cover-card p { opacity: 0.7; line-height: 1.55; font-size: 0.95rem; }
+
+        /* Newsletter */
+        .newsletter-section { text-align: center; min-height: auto; padding: 60px 0; }
+        .newsletter-section h2 { font-size: 1.3rem; margin-bottom: 10px; }
+        .newsletter-section p { opacity: 0.7; margin-bottom: 28px; font-size: 0.95rem; }
+        .newsletter-embed { max-width: 420px; margin: 0 auto; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid #1a1a2e; }
+        footer p { font-size: 0.85rem; opacity: 0.5; margin-bottom: 6px; }
+        .footer-link { color: #c8a96e; opacity: 0.6; font-size: 0.85rem; }
+        .footer-link:hover { opacity: 1; }
+
         @media (max-width: 768px) {
-            section {
-                padding: 60px 0;
-                min-height: auto;
-            }
-            
-            .pillars {
-                grid-template-columns: 1fr;
-            }
-            
-            .tagline {
-                font-size: 1.4rem;
-            }
+            section { padding: 50px 0; min-height: auto; }
+            .hero h1 { font-size: 1.6rem; }
+            .hero-sub { font-size: 0.95rem; }
+            .covers-grid { grid-template-columns: 1fr; }
+            .nav-right { gap: 14px; }
+            .nav-right a { font-size: 0.8rem; }
+            .nav-cta { padding: 5px 12px; font-size: 0.8rem; }
         }
-        
         @media (max-width: 480px) {
-            .tagline {
-                font-size: 1.2rem;
-            }
-            
-            .logo {
-                width: 150px;
-                height: 150px;
-            }
+            .hero h1 { font-size: 1.35rem; }
+            .logo { width: 140px; height: 140px; }
         }
     </style>
 </head>
 <body>
+    <nav class="nav-bar">
+        <div class="container nav-inner">
+            <a href="/" class="nav-logo">MIMIR</a>
+            <div class="nav-right">
+                <a href="/blog">Blog</a>
+                <a href="https://mimirisense.gumroad.com/l/qlomsk" target="_blank">Audit Checklist</a>
+                <a href="#newsletter">Newsletter</a>
+            </div>
+        </div>
+    </nav>
+
     <section class="hero">
         <div class="container">
             <div class="logo">
@@ -227,49 +202,48 @@
                     <circle cx="340" cy="340" r="300" fill="none" stroke="#c8a96e" stroke-width="2"/>
                 </svg>
             </div>
-            <h1 class="tagline">The well of signal in a world of noise</h1>
-            <a href="#newsletter" class="cta-button">Subscribe to the signal</a>
+            <h1>How AI agents really fail in production — and how to build ones that don't.</h1>
+            <p class="hero-sub">A field guide to AI engineering: agent architecture, memory, and the failure modes nobody warns you about until production.</p>
+            <div class="hero-buttons">
+                <a href="/blog" class="btn-primary">Read the blog</a>
+                <a href="https://mimirisense.gumroad.com/l/qlomsk" target="_blank" class="btn-secondary">Get the Audit Checklist</a>
+            </div>
         </div>
     </section>
-    
-    <section class="manifesto">
+
+    <section class="covers-section">
         <div class="container">
-            <h2 class="section-title">Three pillars of intelligence</h2>
-            <p class="manifesto-intro">In the digital ether, signal extraction requires precision filtering of noise. MIMIR operates at the intersection of asymmetric information and computational clarity.</p>
-            
-            <div class="pillars">
-                <div class="pillar-card">
-                    <h3 class="pillar-title">AI EDGE</h3>
-                    <p class="pillar-desc">Automation, orchestration, LLM pipelines</p>
+            <h2>What MIMIR covers</h2>
+            <div class="covers-grid">
+                <div class="cover-card">
+                    <h3>Architecture &amp; Reliability</h3>
+                    <p>Agents that survive long, multi-step runs instead of collapsing at step six.</p>
                 </div>
-                <div class="pillar-card">
-                    <h3 class="pillar-title">SIGNAL</h3>
-                    <p class="pillar-desc">Markets, macro, geopolitical intelligence</p>
+                <div class="cover-card">
+                    <h3>Memory &amp; Context</h3>
+                    <p>Why agents drift mid-task, and how to keep working memory clean.</p>
                 </div>
-                <div class="pillar-card">
-                    <h3 class="pillar-title">DARK NET</h3>
-                    <p class="pillar-desc">Privacy, digital sovereignty, opsec</p>
+                <div class="cover-card">
+                    <h3>Failure Modes</h3>
+                    <p>How AI systems break silently in production — and how to catch it before users do.</p>
                 </div>
             </div>
         </div>
     </section>
-    
-    <section id="newsletter" class="newsletter">
+
+    <section id="newsletter" class="newsletter-section">
         <div class="container">
-            <h2 class="section-title">Receive the signal</h2>
-            <p class="manifesto-intro">One dispatch per week. Pure signal, zero noise.</p>
-            
+            <h2>Receive the signal</h2>
+            <p>One dispatch per week on building reliable AI systems.</p>
             <div class="newsletter-embed">
                 <script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
                 <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cf2ff42e-e2fb-4744-807e-9fd83973e9bb"></script>
             </div>
         </div>
     </section>
-    
+
     <footer>
         <div class="container">
-        <p><a href="/blog" style="color:#c8a96e;text-decoration:none;opacity:0.7">Blog</a></p>
-        
             <p>© 2026 MIMIR Intelligence</p>
             <a href="https://x.com/mimir_Intel" class="footer-link" target="_blank">@mimir_Intel</a>
         </div>
