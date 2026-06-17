@@ -45,8 +45,6 @@
         .container { max-width: 700px; margin: 0 auto; padding: 0 20px; }
         .article-header { padding: 80px 0 0; text-align: center; }
         .article-body { padding: 20px 0 60px; }
-        .back-link { display: inline-block; margin-bottom: 2rem; font-size: 0.9rem; opacity: 0.7; }
-        .back-link:hover { opacity: 1; }
         .article-footer { border-top: 1px solid #1a1a2e; padding-top: 2rem; margin-top: 3rem; font-size: 0.9rem; color: #888; text-align: center; }
         .nav-bar {
             background: #0a0a0f;
@@ -85,39 +83,22 @@
     <main class="article-body">
         <div class="container">
             <p>You've seen it even if you didn't have a name for it. An agent starts sharp — it understands the task, takes the first few steps cleanly — and then, somewhere around step six, it starts making decisions that have less and less to do with what you actually asked. It contradicts something it decided earlier. It "forgets" a constraint you gave it at the start. By the end it's confidently solving a problem that isn't yours.</p>
-
 <p>That drift has a cause, and it isn't that the model "got dumber." It's Context Bleed.</p>
-
 <h2>What Context Bleed actually is</h2>
-
 <p>An agent's context window is its working memory — everything it can see while it decides the next move. At the start, that memory is clean: your goal, your constraints, the relevant inputs.</p>
-
 <p>But an agent doesn't just read its context. It <em>writes</em> to it. Every step, it appends its own reasoning, its tool calls, the outputs it got back, the dead-ends it explored. Step by step, the context fills up — not with your task, but with the agent's own running monologue, mistakes included.</p>
-
 <p>Context Bleed is what happens when that accumulated self-output starts to outweigh the original goal. The agent stops reasoning about your task and starts reasoning about its own recent history. Its working memory has quietly turned into a transcript of its own confusion — and it trusts that transcript completely.</p>
-
 <h2>Why it happens</h2>
-
 <p>Three things compound here.</p>
-
 <p>Recency wins. Models weight recent context heavily. After twenty steps, your original instruction is ancient history buried at the top, while the agent's last few (self-generated, possibly wrong) thoughts sit front and center. The thing it's most influenced by is the thing it just said.</p>
-
 <p>Early mistakes become facts. If the agent makes a wrong assumption at step three and writes it into the context, that assumption is now part of the record. At step ten it doesn't re-examine it — it treats it as established truth. One bad turn doesn't get corrected; it gets cited.</p>
-
 <p>The goal gets diluted. Your actual instruction is a shrinking fraction of a context that's now mostly the agent's own output. Signal-to-noise drops with every step. The longer the run, the quieter your goal gets.</p>
-
 <p>Put together: the agent drifts because the loudest voice in its memory is its own — and that voice has been wrong at least once.</p>
-
 <h2>Why it's hard to catch</h2>
-
 <p>Context Bleed doesn't announce itself. No error, no crash. Each individual step looks locally reasonable — it follows from the step before it. The drift only shows up in aggregate, when you compare where the agent ended up against where you pointed it.</p>
-
 <p>That's what makes it dangerous in production. It's one of the quieter ways agents <a href="https://mimir-intelligence.com/blog/why-ai-agents-fail-in-production">fail after they leave the demo</a>: your monitoring says everything ran, every step "succeeded," and the output is subtly, confidently wrong.</p>
-
 <h2>How to spot it</h2>
-
 <p>A few tells:</p>
-
 <ul>
 <li>The agent repeats itself or loops on something it already resolved.</li>
 <li>It contradicts a decision it made earlier in the same run.</li>
@@ -125,29 +106,17 @@
 <li>Quality degrades with length — short tasks are fine, long ones fall apart.</li>
 <li>Its choices track its recent output more than your original goal.</li>
 </ul>
-
 <p>If your agent is great in a three-step demo and unreliable in a fifteen-step job, Context Bleed is a prime suspect.</p>
-
 <h2>How to stop it</h2>
-
 <p>The fix isn't a bigger context window — that just delays the bleed. The fix is treating memory as something you manage, not something you let pile up.</p>
-
 <p>Separate the task state from the chat log. Keep a clean, structured record of what the goal is and what's actually been accomplished, distinct from the raw running transcript. The agent should reason from the state, not from the pile.</p>
-
 <p>Rebuild context from verified state, not raw history. Instead of feeding the agent everything it has ever said, reconstruct its working context each step from a canonical, checked record. What's confirmed goes in; the noise stays out.</p>
-
 <p>Re-inject the goal. Don't let the original instruction get buried. Surface it again at each step, so the most important thing isn't also the oldest thing.</p>
-
 <p>Treat the agent's own output as a draft, not a fact. Prior steps are proposals to be verified, not truths to be trusted. An early mistake shouldn't get to become canon just because it was written down.</p>
-
 <p>Checkpoint and reset. Every few steps, restart from a known-good state. A clean reset every five steps beats a context that's been quietly rotting for fifty.</p>
-
 <p>Most of these come down to one principle: the agent's memory should be a curated record of what's <em>true</em>, not an unfiltered log of everything it <em>said</em>.</p>
-
 <h2>Where this fits</h2>
-
 <p>Context Bleed is one specific failure inside the broader problem of memory and context governance — and one worth checking explicitly before you ship. The <a href="https://mimirisense.gumroad.com/l/qlomsk">MIMIR AI Systems Audit Checklist</a> scores your system on exactly this: whether your context is rebuilt from verified state, whether prior outputs are treated as untrusted, whether your memory layers are actually separated. €15, run it before your next deploy.</p>
-
 <p>An agent that drifts isn't broken. It's just remembering the wrong things. Fix what it remembers, and the drift goes with it.</p>
             <div class="article-footer">
                 <a href="/blog">← Back to all articles</a>
