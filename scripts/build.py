@@ -413,6 +413,17 @@ def add_blog_link_to_landing(html):
     return html
 
 
+def strip_leading_h1(text):
+    """Remove the first # H1 line from body text when frontmatter has a title."""
+    lines = text.splitlines()
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if stripped.startswith("# ") and not stripped.startswith("##"):
+            remaining = "\n".join(lines[i + 1:]).strip()
+            return remaining
+    return text
+
+
 def main():
     print("📦 Build: Markdown → HTML")
     print(f"   Content dir: {CONTENT_DIR}/")
@@ -431,6 +442,9 @@ def main():
             slug = slug_from_filename(fname)
             md = read_file(os.path.join(CONTENT_DIR, fname))
             meta, body_md = parse_frontmatter(md)
+            # Strip leading H1 if title exists in frontmatter (avoids duplicate H1)
+            if "title" in meta:
+                body_md = strip_leading_h1(body_md)
             body_html = md_to_html(body_md)
             html = build_article_html(slug, meta, body_html)
             write_file(os.path.join(OUTPUT_DIR, f"{slug}.html"), html)
