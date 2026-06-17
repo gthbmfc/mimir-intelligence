@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Pages
+name: Build & Deploy to Cloudflare Pages
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Build Markdown → HTML
+        run: python3 scripts/build.py
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
