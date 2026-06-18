@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human-in-the-Loop for AI Agents: When to Keep a Human in Control — MIMIR Intelligence</title>
+    <meta name="description" content="Full autonomy is how AI agents cause real damage. Here&#x27;s how to decide which actions need human approval — and how to add checkpoints without killing the automation.">
+    <link rel="canonical" href="https://mimir-intelligence.com/blog/human-in-the-loop-ai-agents">
+    <meta property="og:title" content="Human-in-the-Loop for AI Agents: When to Keep a Human in Control">
+    <meta property="og:description" content="Full autonomy is how AI agents cause real damage. Here&#x27;s how to decide which actions need human approval — and how to add checkpoints without killing the automation.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mimir-intelligence.com/blog/human-in-the-loop-ai-agents">
+    <meta property="og:site_name" content="MIMIR Intelligence">
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #0a0a0f;
+            color: #e0e0e0;
+            font-family: system-ui, sans-serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        h1, h2, h3 { font-family: Georgia, serif; color: #c8a96e; font-weight: normal; letter-spacing: 0.5px; }
+        h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+        h2 { font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.8rem; }
+        a { color: #c8a96e; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        p { margin-bottom: 1.5rem; }
+        ul, ol { margin-bottom: 1.5rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        hr { border: none; border-top: 1px solid #1a1a2e; margin: 2.5rem 0; }
+        pre {
+            background: #0d0d1a;
+            border: 1px solid #1a1a2e;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        code { font-family: ui-monospace, monospace; }
+        code:not(pre code) { background: #1a1a2e; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.9em; }
+        time { display: block; color: #888; font-size: 0.9rem; margin-bottom: 2rem; }
+        .container { max-width: 700px; margin: 0 auto; padding: 0 20px; }
+        .article-header { padding: 80px 0 0; text-align: center; }
+        .article-body { padding: 20px 0 60px; }
+        .article-footer { border-top: 1px solid #1a1a2e; padding-top: 2rem; margin-top: 3rem; font-size: 0.9rem; color: #888; text-align: center; }
+        .nav-bar {
+            background: #0a0a0f;
+            border-bottom: 1px solid #1a1a2e;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-bar .container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; }
+        .nav-logo { font-family: Georgia, serif; color: #c8a96e; font-size: 1.2rem; letter-spacing: 3px; }
+        .nav-links a { margin-left: 20px; font-size: 0.9rem; opacity: 0.7; }
+        .nav-links a:hover { opacity: 1; text-decoration: none; }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.3rem; }
+            .article-header { padding: 40px 0 0; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container" style="max-width:700px">
+            <a href="https://mimir-intelligence.com" class="nav-logo">MIMIR</a>
+            <div class="nav-links">
+                <a href="/blog">Blog</a>
+            </div>
+        </div>
+    </nav>
+    <header class="article-header">
+        <div class="container">
+            <h1>Human-in-the-Loop for AI Agents: When to Keep a Human in Control</h1>
+            <time datetime="2026-06-18">2026-06-18</time>
+        </div>
+    </header>
+    <main class="article-body">
+        <div class="container">
+            <p>The pitch for AI agents is autonomy: set them loose and they get the work done while you do something else. The disasters come from taking that pitch literally.</p>
+<p>The stories are always the same shape. An agent with database access "cleans up" by deleting the wrong records. A support agent issues refunds it was never meant to approve. A coding agent force-pushes over a colleague's work. None of these were model failures — the model did exactly what an unsupervised system will eventually do. They were design failures: nobody decided, in advance, which actions a machine should never take alone.</p>
+<p>Human-in-the-loop is the fix. But most teams get it wrong in one of two directions — either no human anywhere, or a human rubber-stamping everything. The real skill is knowing exactly where the human belongs.</p>
+<h2>Autonomy is a dial, not a switch</h2>
+<p>The mistake is treating "autonomous" as yes or no. It isn't. Think of it as a dial from 1 to 5:</p>
+<ul>
+<li>1 — the human does it; the agent only suggests.</li>
+<li>2 — the agent drafts, the human approves every time.</li>
+<li>3 — the agent acts, but pauses for approval on flagged actions.</li>
+<li>4 — the agent acts and notifies; the human can step in.</li>
+<li>5 — fully autonomous, no human in the path.</li>
+</ul>
+<p>The point isn't to pick one number for your whole system. It's to assign a level <em>per action</em>, based on what that action can actually do.</p>
+<h2>The two questions that decide where the human goes</h2>
+<p>For any action your agent can take, ask two things.</p>
+<p>Can it be undone? Reading data, drafting text, running a search — reversible, low-risk, let it run. Deleting records, sending messages, moving money, publishing — irreversible. Those want a human.</p>
+<p>How big is the blast radius? An action that touches one test row is not the action that touches every customer. The wider the consequences, the higher up the dial you go.</p>
+<p>Reversible and small: full autonomy, no checkpoint. Irreversible and wide: a human approves before it happens, every time. Most actions sit somewhere between, and those two questions tell you where.</p>
+<h2>Where the human actually belongs</h2>
+<p>In practice, you put a checkpoint:</p>
+<ul>
+<li>Before irreversible actions — delete, send, pay, publish, deploy. The classic "are you sure?" — but enforced by the system, not left to the agent's judgment.</li>
+<li>When the agent's confidence is low — if a step's confidence falls below a threshold, route it to a human instead of letting the agent guess and march on.</li>
+<li>At intervals on long runs — a checkpoint every few steps catches drift before it compounds. It's also your defense against Context Bleed, where the agent slowly loses the plot.</li>
+<li>On anything novel — situations outside the tested envelope are exactly where an agent is least reliable and most confident. Those should escalate, not improvise.</li>
+</ul>
+<h2>Doing it without killing the point</h2>
+<p>Here's the trap: if a human has to approve everything, you haven't built automation — you've built a slow, expensive human with extra steps. Human-in-the-loop only works if the human's attention is rare and well-aimed.</p>
+<p>A few rules that keep it useful:</p>
+<ul>
+<li>Review the risky few, not the routine many. If your human is approving more than a small fraction of actions, your thresholds are wrong.</li>
+<li><strong>Give them enough to decide in seconds.</strong> A good checkpoint shows what the agent is about to do, why, and what it's based on — not a wall of logs.</li>
+<li>Build a real escalation path. When the agent is stuck or out of its depth, it should have somewhere to send the problem, not a loop to spin in.</li>
+<li>Decide the levels before you ship, not after the incident. The whole point is that the checkpoint exists <em>before</em> the irreversible action — not in the post-mortem.</li>
+</ul>
+<h2>Where this fits</h2>
+<p>Knowing which actions need a human — and proving your system actually enforces it — is one of the things worth auditing before you trust an agent in production. The <a href="https://mimirisense.gumroad.com/l/qlomsk">MIMIR AI Systems Audit Checklist</a> scores exactly this: whether high-stakes actions require approval, whether your review rate is sane, whether there's a real escalation path. It's part of the same picture as the other ways agents fail in production. €15, run it before your next deploy.</p>
+<p>Autonomy isn't the goal. <em>Trustworthy</em> autonomy is — and that's the kind with a human in exactly the right places, and nowhere else.</p>
+            <div class="article-footer">
+                <a href="/blog">← Back to all articles</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
