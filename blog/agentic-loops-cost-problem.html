@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Loop Trap: Why Infinite AI Agents Are a Cost Problem Disguised as a Breakthrough — MIMIR Intelligence</title>
+    <meta name="description" content="Boris Cherny&#x27;s vision of continuous agentic loops is technically right. But without a budget primitive, &#x27;continuous improvement&#x27; means &#x27;runaway spend.">
+    <link rel="canonical" href="https://mimir-intelligence.com/blog/agentic-loops-cost-problem">
+    <meta property="og:title" content="The Loop Trap: Why Infinite AI Agents Are a Cost Problem Disguised as a Breakthrough">
+    <meta property="og:description" content="Boris Cherny&#x27;s vision of continuous agentic loops is technically right. But without a budget primitive, &#x27;continuous improvement&#x27; means &#x27;runaway spend.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mimir-intelligence.com/blog/agentic-loops-cost-problem">
+    <meta property="og:site_name" content="MIMIR Intelligence">
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #0a0a0f;
+            color: #e0e0e0;
+            font-family: system-ui, sans-serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        h1, h2, h3 { font-family: Georgia, serif; color: #c8a96e; font-weight: normal; letter-spacing: 0.5px; }
+        h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+        h2 { font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.8rem; }
+        a { color: #c8a96e; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        p { margin-bottom: 1.5rem; }
+        ul, ol { margin-bottom: 1.5rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        hr { border: none; border-top: 1px solid #1a1a2e; margin: 2.5rem 0; }
+        pre {
+            background: #0d0d1a;
+            border: 1px solid #1a1a2e;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        code { font-family: ui-monospace, monospace; }
+        code:not(pre code) { background: #1a1a2e; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.9em; }
+        time { display: block; color: #888; font-size: 0.9rem; margin-bottom: 2rem; }
+        .container { max-width: 700px; margin: 0 auto; padding: 0 20px; }
+        .article-header { padding: 80px 0 0; text-align: center; }
+        .article-body { padding: 20px 0 60px; }
+        .article-footer { border-top: 1px solid #1a1a2e; padding-top: 2rem; margin-top: 3rem; font-size: 0.9rem; color: #888; text-align: center; }
+        .nav-bar {
+            background: #0a0a0f;
+            border-bottom: 1px solid #1a1a2e;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-bar .container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; }
+        .nav-logo { font-family: Georgia, serif; color: #c8a96e; font-size: 1.2rem; letter-spacing: 3px; }
+        .nav-links a { margin-left: 20px; font-size: 0.9rem; opacity: 0.7; }
+        .nav-links a:hover { opacity: 1; text-decoration: none; }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.3rem; }
+            .article-header { padding: 40px 0 0; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container" style="max-width:700px">
+            <a href="https://mimir-intelligence.com" class="nav-logo">MIMIR</a>
+            <div class="nav-links">
+                <a href="/blog">Blog</a>
+            </div>
+        </div>
+    </nav>
+    <header class="article-header">
+        <div class="container">
+            <h1>The Loop Trap: Why Infinite AI Agents Are a Cost Problem Disguised as a Breakthrough</h1>
+            <time datetime="2026-06-24">2026-06-24</time>
+        </div>
+    </header>
+    <main class="article-body">
+        <div class="container">
+            <p>The AI world is getting "loopy." At Meta's @Scale conference last week, Claude Code creator Boris Cherny made the case that agentic loops—swarms of AI agents running continuously in the background, submitting pull requests, refactoring code, never stopping—are as big a step as the shift from handwritten code to AI-written code.</p>
+<p>He's right about the technical trajectory. He's wrong about what it costs.</p>
+<h2>The Non-Deterministic Gamble</h2>
+<p>Cherny's demo is seductive: one agent hunts for architectural improvements, another finds duplicated abstractions. They work 24/7, submitting PRs like human teammates. The codebase evolves constantly, so they never run out of work.</p>
+<p>Technically, this works. Recursive loops with non-deterministic termination—where a subagent decides when to stop rather than a hard condition—are a known paradigm, as Russell Brandom reports for TechCrunch. The Ralph Loop sums up a model's progress and asks if the goal is met, bouncing the agent back until completion.</p>
+<p>The problem: "until completion" is unbounded.</p>
+<h2>The Token Ceiling Nobody Talks About</h2>
+<p>Cherny's framework burns tokens at a rate that makes regular agentic AI look frugal. A Q&amp;A chatbot costs pennies per query. A single agent running a task costs dollars. A continuous loop of agents improving a codebase around the clock? That's a cost function with no upper bound.</p>
+<p>This is fine for Anthropic, whose business model is selling tokens. For everyone else—startups, mid-market engineering teams, solo developers—the loop model introduces a failure mode that doesn't exist in deterministic software: financial drift. Your agents aren't stuck in an infinite loop in the traditional sense. They're stuck in an economic loop, and you don't notice until the bill arrives.</p>
+<h2>The Missing Guardrail</h2>
+<p>What's conspicuously absent from the loop narrative is a budget primitive. In traditional software, infinite loops crash the process. In agentic loops, they just cost money. The agent doesn't halt—it keeps "making incremental improvements" until someone manually kills it or the account runs dry.</p>
+<p>Cherny's framework treats continuous operation as a feature. But continuous operation without a budget constraint is not autonomy. It's a runaway process with a credit card.</p>
+<p>The industry needs a budget abstraction for loops: a declarative token ceiling, a cost-to-progress ratio that triggers a halt, or at minimum a kill switch that isn't a human watching the bill. Without it, the "loop" is less a breakthrough and more a liability wrapped in a demo.</p>
+<hr />
+<p><em>Sources:</em><br />
+<em>— <a href="https://techcrunch.com/2026/06/22/the-ai-world-is-getting-loopy/">TechCrunch: "The AI world is getting 'loopy'"</a> by Russell Brandom</em></p>
+            <div class="article-footer">
+                <a href="/blog">← Back to all articles</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
